@@ -1,26 +1,329 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-serif: var(--font-serif);
+  --font-heading: var(--font-serif);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  /* Chatback warm-midnight theme. Background is a deep blue-black with a
+   * touch of warmth; accent is a candle-amber. Picked for the
+   * "talk to the person your AI history remembers" vibe — intimate,
+   * editorial, by-firelight. */
+  --background: #0a0a14;
+  --foreground: #f5f3ed;
+  --card: #15152a;
+  --card-foreground: #f5f3ed;
+  --popover: #15152a;
+  --popover-foreground: #f5f3ed;
+  --primary: #f4b942;
+  --primary-foreground: #15110a;
+  --secondary: #1f1f3a;
+  --secondary-foreground: #f5f3ed;
+  --muted: #1f1f3a;
+  --muted-foreground: #a7a4b8;
+  --accent: #f4b942;
+  --accent-foreground: #15110a;
+  --destructive: #fda4af;
+  --border: rgba(244, 185, 66, 0.10);
+  --input: rgba(244, 185, 66, 0.18);
+  --ring: rgba(244, 185, 66, 0.55);
+  --chart-1: #f4b942;
+  --chart-2: #fcd34d;
+  --chart-3: #a7a4b8;
+  --chart-4: #1f1f3a;
+  --chart-5: #15152a;
+  --sidebar: #15152a;
+  --sidebar-foreground: #f5f3ed;
+  --sidebar-primary: #f4b942;
+  --sidebar-primary-foreground: #15110a;
+  --sidebar-accent: #1f1f3a;
+  --sidebar-accent-foreground: #f5f3ed;
+  --sidebar-border: rgba(244, 185, 66, 0.10);
+  --sidebar-ring: rgba(244, 185, 66, 0.55);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    /* Subtle film-grain via inline SVG noise. ~3% strength so it never
+     * fights the type but adds depth so the background doesn't feel flat. */
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.96  0 0 0 0 0.95  0 0 0 0 0.93  0 0 0 0.07 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    background-repeat: repeat;
+    background-attachment: fixed;
+  }
+  html {
+    @apply font-sans;
+  }
+  /* Selection picks up the amber accent so even highlighting feels on-brand. */
+  ::selection {
+    background-color: rgba(244, 185, 66, 0.35);
+    color: #f5f3ed;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Utility helpers used across the new look. */
+@layer utilities {
+  .text-warm { color: #f5f3ed; }
+  .text-warm-muted { color: #a7a4b8; }
+  .bg-midnight { background-color: #0a0a14; }
+  .bg-surface { background-color: #15152a; }
+  .bg-surface-2 { background-color: #1f1f3a; }
+  .border-warm { border-color: rgba(244, 185, 66, 0.12); }
+  .border-warm-strong { border-color: rgba(244, 185, 66, 0.32); }
+
+  /* Drop-cap helper for editorial intros — apply to a paragraph and the
+   * first letter renders as a serif drop cap. */
+  .drop-cap::first-letter {
+    @apply font-serif;
+    float: left;
+    font-size: 3.4em;
+    line-height: 0.85;
+    padding-right: 0.08em;
+    color: #f4b942;
+  }
+
+  /* ─── Motion ─── */
+
+  /* Staggered fade-up entrance. Apply to children, use --i to offset. */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(14px);
+    animation: fade-up 700ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: calc(var(--i, 0) * 80ms);
+  }
+  @keyframes fade-up {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Slow shimmer for the issue number / accent label so it feels alive. */
+  .shimmer-text {
+    background: linear-gradient(
+      90deg,
+      rgba(244, 185, 66, 0.4) 0%,
+      rgba(244, 185, 66, 1) 50%,
+      rgba(244, 185, 66, 0.4) 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 6s linear infinite;
+  }
+  @keyframes shimmer {
+    to {
+      background-position: -200% 0;
+    }
+  }
+
+  /* Ambient candlelight glow used on page bodies. */
+  .candle-ambient {
+    position: relative;
+    isolation: isolate;
+  }
+  .candle-ambient::before {
+    content: "";
+    position: fixed;
+    inset: -10vh -10vw;
+    z-index: -1;
+    background:
+      radial-gradient(60vmax 50vmax at 20% -10%, rgba(244, 185, 66, 0.08), transparent 60%),
+      radial-gradient(50vmax 40vmax at 110% 110%, rgba(126, 90, 200, 0.07), transparent 60%);
+    pointer-events: none;
+    animation: candle 22s ease-in-out infinite alternate;
+  }
+  @keyframes candle {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1);
+      filter: blur(0px);
+    }
+    50% {
+      transform: translate3d(2vw, -1vh, 0) scale(1.05);
+      filter: blur(2px);
+    }
+    100% {
+      transform: translate3d(-1vw, 2vh, 0) scale(1);
+      filter: blur(0px);
+    }
+  }
+
+  /* Cursor-following spotlight on the hero. */
+  .cursor-spotlight {
+    position: relative;
+  }
+  .cursor-spotlight::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      400px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(244, 185, 66, 0.10),
+      transparent 60%
+    );
+    transition: opacity 200ms ease-out;
+  }
+
+  /* Magnetic / glow CTA. */
+  .btn-glow {
+    box-shadow:
+      0 0 0 0 rgba(244, 185, 66, 0),
+      0 10px 28px -14px rgba(244, 185, 66, 0.55);
+    transition: box-shadow 250ms ease, transform 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-glow:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      0 0 0 6px rgba(244, 185, 66, 0.10),
+      0 20px 40px -16px rgba(244, 185, 66, 0.7);
+  }
+  .btn-glow:active {
+    transform: translateY(0);
+  }
+
+  /* Card lift on hover — subtle warm glow. */
+  .card-lift {
+    transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 200ms ease, box-shadow 250ms ease;
+  }
+  .card-lift:hover {
+    transform: translateY(-2px);
+    border-color: rgba(244, 185, 66, 0.32);
+    box-shadow: 0 18px 40px -22px rgba(244, 185, 66, 0.5);
+  }
+
+  /* Mode-tile delight: rises slightly + arrow nudges to the right. */
+  .mode-tile {
+    transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 200ms ease, background-color 200ms ease;
+  }
+  .mode-tile:hover {
+    transform: translateY(-3px);
+  }
+  .mode-tile:hover .mode-tile__arrow {
+    transform: translateX(4px);
+  }
+  .mode-tile__arrow {
+    transition: transform 220ms ease;
+  }
+
+  /* Typewriter caret used in loading states. */
+  .caret {
+    display: inline-block;
+    width: 0.5ch;
+    background: currentColor;
+    margin-left: 0.15ch;
+    height: 0.9em;
+    vertical-align: -0.1em;
+    animation: caret-blink 1s steps(2, end) infinite;
+  }
+  @keyframes caret-blink {
+    50% {
+      opacity: 0;
+    }
+  }
+}
+
+/* Respect users' motion preference. Disable all decorative motion. */
+@media (prefers-reduced-motion: reduce) {
+  .fade-up,
+  .shimmer-text,
+  .candle-ambient::before,
+  .caret {
+    animation: none !important;
+  }
+  .fade-up {
+    opacity: 1;
+    transform: none;
+  }
+  .card-lift:hover,
+  .btn-glow:hover,
+  .mode-tile:hover {
+    transform: none;
+  }
 }
