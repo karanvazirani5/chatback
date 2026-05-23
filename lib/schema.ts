@@ -80,6 +80,65 @@ export const MasterAnalysisSchema = z.object({
   viral_modes: ViralModesSchema,
 });
 
+export const NextMoveSchema = z.object({
+  source_type: z.enum(["unfinished", "open_loop"]),
+  source_name: z.string().min(1),
+  headline: z.string().min(1),
+  action: z.string().min(1),
+  asset_label: z.string().min(1),
+  asset_text: z.string().min(1),
+});
+
+export const SUBMIT_NEXT_MOVE_TOOL = {
+  name: "submit_next_move",
+  description:
+    "Submit the one next move the user should make this week, plus the paste-ready asset they need to actually do it.",
+  input_schema: {
+    type: "object",
+    required: [
+      "source_type",
+      "source_name",
+      "headline",
+      "action",
+      "asset_label",
+      "asset_text",
+    ],
+    properties: {
+      source_type: {
+        type: "string",
+        enum: ["unfinished", "open_loop"],
+        description:
+          "Which list this move comes from — an unfinished project or an open loop question.",
+      },
+      source_name: {
+        type: "string",
+        description:
+          "EXACT name (for Unfinished) or question (for OpenLoop) from the input. Match character-for-character so the dedupe key works.",
+      },
+      headline: {
+        type: "string",
+        description:
+          "3–6 word imperative headline. e.g. 'Send the Devon Slack', 'Publish Receipts #4', 'Submit the a16z form'.",
+      },
+      action: {
+        type: "string",
+        description:
+          "One short paragraph (1–2 sentences) saying what to do and why it's the right next step.",
+      },
+      asset_label: {
+        type: "string",
+        description:
+          "Noun label for the asset — e.g. 'Slack draft', 'Substack intro', 'Application answer', 'Email reply'.",
+      },
+      asset_text: {
+        type: "string",
+        description:
+          "PASTE-READY first-person asset the user can use immediately. NOT 'you could write…' — write it as them. 40–180 words. Match their actual situation (project names, people, decisions from the input). Tone: theirs, not corporate.",
+      },
+    },
+  },
+} as const;
+
 // JSON Schema (Anthropic tool input_schema). Mirrors the zod schema above.
 // Kept inline rather than generated so the model sees exactly what we want.
 export const SUBMIT_ANALYSIS_TOOL = {

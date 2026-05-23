@@ -109,6 +109,22 @@ export interface MasterAnalysis {
   viral_modes: ViralModes;
 }
 
+export type NextMoveSourceType = "unfinished" | "open_loop";
+
+export interface NextMove {
+  source_type: NextMoveSourceType;
+  /** Exact name/question of the source item — used as the dedupe key. */
+  source_name: string;
+  /** 3–6 word imperative headline. e.g. "Send the Devon Slack". */
+  headline: string;
+  /** One-paragraph framing of the action. */
+  action: string;
+  /** Short noun label for the asset, e.g. "Slack draft", "Substack intro". */
+  asset_label: string;
+  /** Paste-ready first-person asset the user can actually use. */
+  asset_text: string;
+}
+
 export type ModeId =
   | "roast"
   | "wrapped"

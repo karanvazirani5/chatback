@@ -19,6 +19,13 @@ export interface ResolvedLoopAction {
   resolvedAt: number;
 }
 
+export type NextMoveOutcome = "done" | "skipped";
+
+export interface NextMoveAction {
+  outcome: NextMoveOutcome;
+  at: number;
+}
+
 export interface UserActions {
   /** Keyed by Unfinished.name. */
   unfinished: Record<string, UnfinishedAction>;
@@ -26,12 +33,15 @@ export interface UserActions {
   thisWeek: Record<string, ThisWeekAction>;
   /** Keyed by OpenLoop.question. */
   resolvedLoops: Record<string, ResolvedLoopAction>;
+  /** Keyed by NextMove.source_name — both done + skipped go here. */
+  nextMoves: Record<string, NextMoveAction>;
 }
 
 const EMPTY_ACTIONS: UserActions = {
   unfinished: {},
   thisWeek: {},
   resolvedLoops: {},
+  nextMoves: {},
 };
 
 let cached: UserActions | null = null;
@@ -51,6 +61,7 @@ function load(): UserActions {
       unfinished: parsed.unfinished ?? {},
       thisWeek: parsed.thisWeek ?? {},
       resolvedLoops: parsed.resolvedLoops ?? {},
+      nextMoves: parsed.nextMoves ?? {},
     };
     return cached;
   } catch {
@@ -155,6 +166,30 @@ export function unresolveLoop(question: string) {
     const next = { ...current.resolvedLoops };
     delete next[question];
     return { ...current, resolvedLoops: next };
+  });
+}
+
+// — Next moves —
+
+export function recordNextMoveOutcome(
+  sourceName: string,
+  outcome: NextMoveOutcome
+) {
+  update((current) => ({
+    ...current,
+    nextMoves: {
+      ...current.nextMoves,
+      [sourceName]: { outcome, at: Date.now() },
+    },
+  }));
+}
+
+export function clearNextMoveOutcome(sourceName: string) {
+  update((current) => {
+    if (!current.nextMoves[sourceName]) return current;
+    const next = { ...current.nextMoves };
+    delete next[sourceName];
+    return { ...current, nextMoves: next };
   });
 }
 
