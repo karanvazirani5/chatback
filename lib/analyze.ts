@@ -56,18 +56,21 @@ export async function analyzeArchive(rawText: string): Promise<MasterAnalysis> {
 
   // Retry once with a stricter nudge if schema validation failed.
   const reason = summariseZodError(firstParse.error);
-  console.warn("[analyze] first attempt invalid:", reason);
+  console.warn("[analyze] first attempt invalid:", reason, {
+    issues: firstParse.error.issues,
+  });
   const second = await callModel(rawText, reason);
   const secondInput = extractToolInput(second);
   const secondParse = MasterAnalysisSchema.safeParse(secondInput);
   if (secondParse.success) return secondParse.data;
 
-  console.error(
-    "[analyze] retry also invalid:",
-    summariseZodError(secondParse.error)
-  );
+  console.error("[analyze] retry also invalid:", {
+    summary: summariseZodError(secondParse.error),
+    issues: secondParse.error.issues,
+    receivedSnippet: JSON.stringify(secondInput).slice(0, 800),
+  });
   throw new Error(
-    "Got a partial result twice. Try again with more text, or use the sample data."
+    "Got a partial result twice. Try the sample data, or paste a different / longer excerpt."
   );
 }
 

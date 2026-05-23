@@ -10,8 +10,10 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs";
 import { useAnalysis } from "@/lib/use-analysis";
-import { clearAll } from "@/lib/storage";
+import { clearAll, setAnalysis, setRawContext } from "@/lib/storage";
 import { resetAnalysisJob } from "@/lib/analysis-job";
+import { recordAnalysisSnapshot } from "@/lib/analysis-history";
+import { SAMPLE_ANALYSIS, SAMPLE_RAW_TEXT } from "@/lib/sample-data";
 import { ThemesCard } from "@/components/dashboard/ThemesCard";
 import { OpenLoopsCard } from "@/components/dashboard/OpenLoopsCard";
 import { DecisionsCard } from "@/components/dashboard/DecisionsCard";
@@ -77,20 +79,37 @@ export default function DashboardPage() {
 
       {status === "error" && (
         <div className="mb-6 rounded-2xl border border-rose-300/30 bg-rose-950/20 p-5 text-sm text-rose-100">
-          <p className="font-serif italic text-base mb-1">
+          <p className="font-serif italic text-lg mb-1.5">
             Couldn&apos;t build your archive.
           </p>
-          <p className="text-rose-200/80 mb-3">{error}</p>
-          <button
-            type="button"
-            onClick={() => {
-              resetAnalysisJob();
-              router.push("/");
-            }}
-            className="font-mono text-[10px] uppercase tracking-[0.22em] text-warm hover:text-primary cursor-pointer"
-          >
-            Try again →
-          </button>
+          <p className="text-rose-200/85 mb-4 leading-relaxed">{error}</p>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                resetAnalysisJob();
+                setAnalysis(SAMPLE_ANALYSIS);
+                setRawContext(SAMPLE_RAW_TEXT);
+                recordAnalysisSnapshot(SAMPLE_ANALYSIS);
+                // Hard reload — the useAnalysis hook caches storage on
+                // mount, so we need a fresh render to pick up the new data.
+                window.location.reload();
+              }}
+              className="flex-1 rounded-full bg-primary text-primary-foreground hover:bg-[#fcd34d] font-serif italic text-sm py-2.5 transition-colors cursor-pointer"
+            >
+              Use sample data instead
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                resetAnalysisJob();
+                router.push("/");
+              }}
+              className="flex-1 rounded-full border border-warm text-warm hover:border-primary/60 font-serif italic text-sm py-2.5 transition-colors cursor-pointer"
+            >
+              Try a different paste
+            </button>
+          </div>
         </div>
       )}
 

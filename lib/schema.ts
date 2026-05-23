@@ -52,9 +52,11 @@ const WrappedSuperlativeSchema = z.object({
 const WrappedStatsSchema = z.object({
   archetype: z.string().min(1),
   tagline: z.string().min(1),
-  numbers: z.array(WrappedNumberSchema).min(4).max(6),
+  numbers: z.array(WrappedNumberSchema).min(3).max(6),
   personality: WrappedFixedPersonalitySchema,
-  superlatives: z.array(WrappedSuperlativeSchema).length(3),
+  // Was exactly 3 — relaxed to 1–4 because Haiku sometimes returns 2 or 4
+  // and the strict count was failing analysis end-to-end.
+  superlatives: z.array(WrappedSuperlativeSchema).min(1).max(4),
 });
 
 const GraveyardEntrySchema = z.object({
@@ -345,9 +347,9 @@ export const SUBMIT_ANALYSIS_TOOL = {
               superlatives: {
                 type: "array",
                 description:
-                  "EXACTLY 3 fun-fact superlatives. Each value MUST point at something specific from the input — a project name, a count, a duration in days/months. NEVER generic. Good examples: {label:'Longest open loop', value:'a16z Scout application — open 252 days'}, {label:'Most-redrafted message', value:'Devon Slack about status pings — 3 drafts, 0 sent'}, {label:'Most consistent habit', value:'Bouldering at Brooklyn Boulders — 11 months running'}. Avoid generic labels like 'most asked topic' if the value isn't specific.",
-                minItems: 3,
-                maxItems: 3,
+                  "1–4 fun-fact superlatives (aim for 3). Each value MUST point at something specific from the input — a project name, a count, a duration in days/months. NEVER generic. Good examples: {label:'Longest open loop', value:'a16z Scout application — open 252 days'}, {label:'Most-redrafted message', value:'Devon Slack about status pings — 3 drafts, 0 sent'}, {label:'Most consistent habit', value:'Bouldering at Brooklyn Boulders — 11 months running'}. Avoid generic labels like 'most asked topic' if the value isn't specific.",
+                minItems: 1,
+                maxItems: 4,
                 items: {
                   type: "object",
                   required: ["label", "value"],
