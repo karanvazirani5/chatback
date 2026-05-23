@@ -129,7 +129,7 @@ export function NextMoveCard({ analysis }: NextMoveCardProps) {
   const outcome = lastMoveOutcome?.outcome;
 
   return (
-    <section className="relative rounded-2xl border border-primary/40 bg-gradient-to-br from-primary/[0.10] via-primary/[0.04] to-transparent p-7 md:p-9 overflow-hidden card-lift">
+    <section className="relative rounded-2xl border border-primary/40 bg-gradient-to-br from-primary/[0.10] via-primary/[0.04] to-transparent p-5 md:p-8 overflow-hidden card-lift">
       <div
         aria-hidden
         className="absolute inset-0 pointer-events-none bg-gradient-to-br from-primary/[0.06] via-transparent to-transparent"

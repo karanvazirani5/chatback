@@ -33,7 +33,7 @@ export function SinceLastTimeCard({ analysis }: SinceLastTimeCardProps) {
   if (diff.totalChanges === 0) return null;
 
   return (
-    <section className="relative rounded-2xl border border-primary/25 bg-[#0a0a14] overflow-hidden p-7 md:p-9">
+    <section className="relative rounded-2xl border border-primary/25 bg-[#0a0a14] overflow-hidden p-5 md:p-7">
       <div
         aria-hidden
         className="absolute inset-0 pointer-events-none"

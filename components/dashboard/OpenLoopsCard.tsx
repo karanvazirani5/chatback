@@ -14,7 +14,7 @@ export function OpenLoopsCard({ loops }: { loops: OpenLoop[] }) {
   const resolved = loops.filter((l) => actions.resolvedLoops[l.question]);
 
   return (
-    <section className="rounded-2xl border border-warm bg-surface/60 p-7 md:p-9 card-lift">
+    <section className="rounded-2xl border border-warm bg-surface/60 p-5 md:p-7 card-lift">
       <div className="flex items-baseline justify-between gap-3 mb-5">
         <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-primary">
           ✺ Open loops

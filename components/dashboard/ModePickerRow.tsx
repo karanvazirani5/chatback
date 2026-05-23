@@ -14,7 +14,7 @@ const MODE_TAGLINES: Record<ModeId, string> = {
 
 export function ModePickerRow() {
   return (
-    <section className="mt-14">
+    <section>
       <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-primary mb-5">
         ✺ Other ways to read your history
       </p>

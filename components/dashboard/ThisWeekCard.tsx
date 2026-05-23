@@ -14,7 +14,7 @@ export function ThisWeekCard({ recommendation }: { recommendation: string }) {
 
   return (
     <section
-      className={`relative rounded-2xl overflow-hidden p-7 md:p-9 transition-opacity ${
+      className={`relative rounded-2xl overflow-hidden p-5 md:p-7 transition-opacity ${
         isDone
           ? "border border-warm bg-surface/40 opacity-80"
           : "border border-primary/30 bg-gradient-to-br from-primary/[0.10] via-primary/[0.04] to-transparent shadow-[0_24px_60px_-30px_rgba(244,185,66,0.45)]"
