@@ -37,17 +37,25 @@ export default function DashboardPage() {
           >
             Chat<span className="italic">back</span>.
           </Link>
-          <button
-            type="button"
-            onClick={() => {
-              clearAll();
-              resetAnalysisJob();
-              router.push("/");
-            }}
-            className="font-mono text-[10px] uppercase tracking-[0.22em] text-warm-muted hover:text-warm transition-colors cursor-pointer"
-          >
-            Start over
-          </button>
+          <div className="flex items-center gap-5">
+            <Link
+              href="/log"
+              className="font-mono text-[10px] uppercase tracking-[0.22em] text-warm-muted hover:text-primary transition-colors"
+            >
+              Your log →
+            </Link>
+            <button
+              type="button"
+              onClick={() => {
+                clearAll();
+                resetAnalysisJob();
+                router.push("/");
+              }}
+              className="font-mono text-[10px] uppercase tracking-[0.22em] text-warm-muted hover:text-warm transition-colors cursor-pointer"
+            >
+              Start over
+            </button>
+          </div>
         </div>
 
         <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-primary mb-3">
