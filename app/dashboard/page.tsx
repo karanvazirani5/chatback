@@ -15,6 +15,7 @@ import { ModePickerRow } from "@/components/dashboard/ModePickerRow";
 import { DashboardSkeleton } from "@/components/dashboard/DashboardSkeleton";
 import { StatusBanner } from "@/components/dashboard/StatusBanner";
 import { NextMoveCard } from "@/components/dashboard/NextMoveCard";
+import { SinceLastTimeCard } from "@/components/dashboard/SinceLastTimeCard";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -84,6 +85,7 @@ export default function DashboardPage() {
         <>
           <StatusBanner />
           <div className="space-y-5">
+            <SinceLastTimeCard analysis={analysis} />
             <NextMoveCard analysis={analysis} />
             <ThemesCard themes={analysis.themes} />
             <OpenLoopsCard loops={analysis.open_loops} />

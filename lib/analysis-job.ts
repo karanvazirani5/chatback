@@ -2,6 +2,7 @@
 
 import type { MasterAnalysis } from "./types";
 import { setAnalysis, setRawContext } from "./storage";
+import { recordAnalysisSnapshot } from "./analysis-history";
 
 /**
  * Single-job state machine for the current analyze call. Lives in
@@ -82,6 +83,7 @@ export function startAnalysisJob(rawText: string) {
       }
       setAnalysis(analysis);
       setRawContext(rawText);
+      recordAnalysisSnapshot(analysis);
       state = {
         status: "success",
         analysis,

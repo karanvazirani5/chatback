@@ -16,6 +16,7 @@ import { SpotlightHero } from "@/components/SpotlightHero";
 import { setAnalysis, setRawContext } from "@/lib/storage";
 import { SAMPLE_ANALYSIS, SAMPLE_RAW_TEXT } from "@/lib/sample-data";
 import { startAnalysisJob, resetAnalysisJob } from "@/lib/analysis-job";
+import { recordAnalysisSnapshot } from "@/lib/analysis-history";
 import {
   parseOpenAiExport,
   type OpenAiExtractResult,
@@ -100,6 +101,7 @@ export default function Home() {
     resetAnalysisJob();
     setAnalysis(SAMPLE_ANALYSIS);
     setRawContext(SAMPLE_RAW_TEXT);
+    recordAnalysisSnapshot(SAMPLE_ANALYSIS);
     router.push("/dashboard");
   };
 

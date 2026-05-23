@@ -1,6 +1,7 @@
 import type { MasterAnalysis } from "./types";
 import { MasterAnalysisSchema } from "./schema";
 import { clearUserActions } from "./user-actions";
+import { clearAnalysisHistory } from "./analysis-history";
 
 const ANALYSIS_KEY = "chatback:analysis";
 const RAW_CONTEXT_KEY = "chatback:raw_context";
@@ -66,4 +67,5 @@ export function clearAll() {
   s.removeItem(ANALYSIS_KEY);
   s.removeItem(RAW_CONTEXT_KEY);
   clearUserActions();
+  clearAnalysisHistory();
 }
