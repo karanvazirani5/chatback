@@ -1,14 +1,10 @@
 import "server-only";
-import Anthropic from "@anthropic-ai/sdk";
 import type { MasterAnalysis, NextMove } from "./types";
 import { NextMoveSchema, SUBMIT_NEXT_MOVE_TOOL } from "./schema";
 import { NEXT_MOVE_SYSTEM_PROMPT } from "./prompts";
+import { chatJson, type JsonSchemaSpec } from "./llm";
 
-const client = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
-
-const MODEL = "claude-haiku-4-5-20251001";
+const MODEL = "openclaw";
 const MAX_TOKENS = 1500;
 
 export async function generateNextMove({
@@ -51,26 +47,13 @@ export async function generateNextMove({
     .filter(Boolean)
     .join("\n");
 
-  const res = await client.messages.create({
+  const input = await chatJson({
     model: MODEL,
-    max_tokens: MAX_TOKENS,
-    tools: [SUBMIT_NEXT_MOVE_TOOL as unknown as Anthropic.Tool],
-    tool_choice: { type: "tool", name: "submit_next_move" },
-    system: [
-      {
-        type: "text",
-        text: NEXT_MOVE_SYSTEM_PROMPT,
-        cache_control: { type: "ephemeral" },
-      },
-    ],
-    messages: [{ role: "user", content: promptBody }],
+    maxTokens: MAX_TOKENS,
+    system: NEXT_MOVE_SYSTEM_PROMPT,
+    user: promptBody,
+    schema: SUBMIT_NEXT_MOVE_TOOL as unknown as JsonSchemaSpec,
   });
 
-  const toolUse = res.content.find(
-    (b): b is Anthropic.ToolUseBlock => b.type === "tool_use"
-  );
-  if (!toolUse) {
-    throw new Error("Model did not return a next move.");
-  }
-  return NextMoveSchema.parse(toolUse.input);
+  return NextMoveSchema.parse(input);
 }
