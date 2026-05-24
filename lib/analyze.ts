@@ -1,56 +1,36 @@
 import "server-only";
-import Anthropic from "@anthropic-ai/sdk";
 import { z } from "zod";
 import type { MasterAnalysis } from "./types";
 import { MasterAnalysisSchema, SUBMIT_ANALYSIS_TOOL } from "./schema";
 import { MASTER_PROMPT } from "./prompts";
-
-const client = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+import { chatJson, type JsonSchemaSpec } from "./llm";
 
 // Haiku 4.5 instead of Sonnet 4.6: ~3-5x faster, comfortably under the 60s
-// function timeout. Quality stays high because tool_use + the strict
-// input_schema do most of the heavy lifting — the model just has to fill in
-// fields, not invent the structure.
-const ANALYZE_MODEL = "claude-haiku-4-5-20251001";
+// function timeout. Quality stays high because the forced tool call + strict
+// schema do most of the heavy lifting — the model just fills in fields.
+const ANALYZE_MODEL = "openclaw";
 const MAX_TOKENS = 4500;
 
-async function callModel(rawText: string, retryReason?: string) {
+async function callModel(
+  rawText: string,
+  retryReason?: string
+): Promise<unknown> {
   const userContent = retryReason
     ? `INPUT:\n${rawText}\n\nIMPORTANT — your previous attempt was rejected: ${retryReason}. This time, populate EVERY required field. Use "Not enough data to say honestly" for any field you genuinely can't fill, but never omit a field.`
     : `INPUT:\n${rawText}`;
 
-  return client.messages.create({
+  return chatJson({
     model: ANALYZE_MODEL,
-    max_tokens: MAX_TOKENS,
-    tools: [SUBMIT_ANALYSIS_TOOL as unknown as Anthropic.Tool],
-    tool_choice: { type: "tool", name: "submit_analysis" },
-    system: [
-      {
-        type: "text",
-        text: MASTER_PROMPT,
-        cache_control: { type: "ephemeral" },
-      },
-    ],
-    messages: [{ role: "user", content: userContent }],
+    maxTokens: MAX_TOKENS,
+    system: MASTER_PROMPT,
+    user: userContent,
+    schema: SUBMIT_ANALYSIS_TOOL as unknown as JsonSchemaSpec,
   });
-}
-
-function extractToolInput(res: Anthropic.Message): unknown {
-  const toolUse = res.content.find(
-    (b): b is Anthropic.ToolUseBlock => b.type === "tool_use"
-  );
-  if (!toolUse) {
-    throw new Error("Claude did not call submit_analysis.");
-  }
-  return toolUse.input;
 }
 
 export async function analyzeArchive(rawText: string): Promise<MasterAnalysis> {
   // First attempt.
-  const first = await callModel(rawText);
-  const firstInput = extractToolInput(first);
+  const firstInput = await callModel(rawText);
   const firstParse = MasterAnalysisSchema.safeParse(firstInput);
   if (firstParse.success) return firstParse.data;
 
@@ -59,8 +39,7 @@ export async function analyzeArchive(rawText: string): Promise<MasterAnalysis> {
   console.warn("[analyze] first attempt invalid:", reason, {
     issues: firstParse.error.issues,
   });
-  const second = await callModel(rawText, reason);
-  const secondInput = extractToolInput(second);
+  const secondInput = await callModel(rawText, reason);
   const secondParse = MasterAnalysisSchema.safeParse(secondInput);
   if (secondParse.success) return secondParse.data;
 

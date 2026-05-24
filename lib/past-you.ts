@@ -1,11 +1,7 @@
 import "server-only";
-import Anthropic from "@anthropic-ai/sdk";
 import { PAST_YOU_SYSTEM_PROMPT } from "./prompts";
 import { filterContextByCutoff } from "./dates";
-
-const client = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+import { chatStream } from "./llm";
 
 export interface PastYouMessage {
   role: "user" | "assistant";
@@ -26,20 +22,14 @@ export async function streamPastYou({
   context: string;
   history: PastYouMessage[];
   message: string;
-}) {
+}): Promise<AsyncIterable<string>> {
   const filtered = filterContextByEra(context, era);
   const system = PAST_YOU_SYSTEM_PROMPT(era, filtered);
 
-  return client.messages.stream({
-    model: "claude-haiku-4-5-20251001",
-    max_tokens: 600,
-    system: [
-      {
-        type: "text",
-        text: system,
-        cache_control: { type: "ephemeral" },
-      },
-    ],
+  return chatStream({
+    model: "openclaw",
+    maxTokens: 600,
+    system,
     messages: [
       ...history.map((m) => ({ role: m.role, content: m.content })),
       { role: "user" as const, content: message },
